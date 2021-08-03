@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  nginx:
+  auth-service:
+  user-service:
+  product-service:
+  cart-service:
+  order-service:
+  payment-service:
+  mongo:
+  rabbitmq:
+  worker:

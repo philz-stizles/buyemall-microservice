@@ -1,0 +1,113 @@
+version: '3.7'
+services:
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile # The name of the docker config file
+      context: ./nginx #
+    ports:
+      - '3050:80'
+  customers:
+    container_name: customer_service
+    restart: always
+    build:
+      dockerfile: Dockerfile # The name of the docker config file
+      context: ./customer-service # Where the docker config file is located
+    volumes:
+      # - /app/node_modules
+      - ./customer-service:/app
+    # ports:
+    #   - '30502:3000'
+    links:
+      - mongo
+    environment:
+      # - dev=1
+      # - db_service_name=mongo
+      - MONGO_URI=mongodb://mongo:27017
+      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+      # - db_retry_time=3000
+  products:
+    container_name: product_service
+    restart: always
+    build:
+      dockerfile: Dockerfile # The name of the docker config file
+      context: ./product-service
+    volumes:
+      # - /app/node_modules
+      - ./product-service:/app
+    # ports:
+    #   - '30503:3000'
+    links:
+      - mongo
+      - orders
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+      - RabbitMQ_URI=amqp://guest:guest@rabbitmq:5672
+      - ORDER_URL=http://orders:3000
+  orders:
+    container_name: orders_service
+    restart: always
+    build:
+      dockerfile: Dockerfile # The name of the docker config file
+      context: ./order-service
+    volumes:
+      # - /app/node_modules
+      - ./order-service:/app
+    # ports:
+    #   - '30504:3000'
+    links:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+      - RabbitMQ_URI=amqp://guest:guest@rabbitmq:5672
+  payments:
+    container_name: payments_service
+    restart: always
+    build:
+      dockerfile: Dockerfile # The name of the docker config file
+      context: ./payment-service
+    volumes:
+      # - /app/node_modules
+      - ./payment-service:/app
+    # ports:
+    #   - '30505:3000'
+    links:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+      - RabbitMQ_URI=amqp://guest:guest@rabbitmq:5672
+  worker:
+    container_name: worker
+    restart: always
+    build:
+      dockerfile: Dockerfile # The name of the docker config file
+      context: ./worker
+    volumes:
+      - /app/node_modules
+      - ./worker:/app
+    # ports:
+    #   - '30505:3000'
+    links:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+      - RabbitMQ_URI=amqp://guest:guest@rabbitmq:5672
+  rabbitmq:
+    image: rabbitmq:3.8.9-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    restart: always
+    # volumes:
+    #   - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+    #   - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+  mongo:
+    image: mongo
+    volumes:
+      - ./db:/data/db
+    ports:
+      - '27017:27017'
