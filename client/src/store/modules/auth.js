@@ -1,16 +1,26 @@
-import AuthService from '../services/auth.service'
+import AuthService from '@/services/auth-service'
 
 const loggedInUser = JSON.parse(localStorage.getItem('user'))
 
 export default {
   namespaced: true,
   state: loggedInUser
-    ? { isAuthenticated: true, loggedInUser }
-    : { isAuthenticated: false, loggedInUser: null },
+    ? {
+        isAuthenticated: true,
+        loggedInUser,
+      }
+    : {
+        isAuthenticated: false,
+        loggedInUser: null,
+        token: null,
+        expiration: null,
+      },
   mutations: {
-    loginSuccess(state, user) {
+    loginSuccess(state, { user, token, expiration }) {
       state.isAuthenticated = true
       state.loggedInUser = user
+      state.token = token
+      state.expiration = expiration
     },
     loginFailure(state) {
       state.isAuthenticated = false
@@ -28,11 +38,11 @@ export default {
     },
   },
   actions: {
-    login({ commit }, credentials) {
-      return AuthService.login(credentials).then(
-        user => {
-          commit('loginSuccess', user)
-          return Promise.resolve(user)
+    signIn({ commit }, credentials) {
+      return AuthService.signIn(credentials).then(
+        data => {
+          commit('loginSuccess', data)
+          return Promise.resolve(data)
         },
         error => {
           commit('loginFailure')

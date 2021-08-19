@@ -1,13 +1,13 @@
-import express, { Request, Response } from 'express';
-import { body } from 'express-validator';
-import { BadRequestError, validateRequest } from '@devdezyn/common';
-import User from '../models/user';
-import jwt from 'jsonwebtoken';
+import express, { Request, Response } from 'express'
+import { body } from 'express-validator'
+import { BadRequestError, validateRequest } from '@devdezyn/common'
+import User from '../models/user'
+import jwt from 'jsonwebtoken'
 
-const router = express.Router();
+const router = express.Router()
 
 router.post(
-  '/api/users/signup',
+  '/api/auth/signup',
   [
     body('email').isEmail().withMessage('Email must be valid'),
     body('password')
@@ -17,15 +17,15 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email })
     if (existingUser) {
-      throw new BadRequestError('Email in use');
+      throw new BadRequestError('Email in use')
     }
 
-    const newUser = User.build({ email, password });
-    await newUser.save();
+    const newUser = User.build({ email, password })
+    await newUser.save()
 
     // Generate JWT
     const userJwt = jwt.sign(
@@ -34,15 +34,17 @@ router.post(
         email: newUser.email,
       },
       process.env.JWT_KEY!
-    );
+    )
 
     // Store it on session object
     req.session = {
       jwt: userJwt,
-    };
+    }
 
-    res.status(201).send(newUser);
+    res
+      .status(201)
+      .send({ status: true, data: newUser, message: 'signup successful' })
   }
-);
+)
 
-export { router as signupRouter };
+export { router as signupRouter }

@@ -1,2 +1,1 @@
-# vue-microservice-shop
-# buyemall-vue-node-micro
+# Buyemall Ecommerce, Inc

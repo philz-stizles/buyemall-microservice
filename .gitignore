@@ -117,4 +117,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+data/
 common/
+rough.txt

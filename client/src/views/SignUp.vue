@@ -1,17 +1,53 @@
 <template>
-  <div class="signup">
-    <!-- <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      /> -->
-    <SignUpForm />
+  <!--
+  This example requires Tailwind CSS v2.0+ 
+  
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/forms'),
+    ],
+  }
+  ```
+-->
+  <div
+    class="
+      signup
+      min-h-screen
+      flex
+      items-center
+      justify-center
+      bg-gray-50
+      py-12
+      px-4
+      sm:px-6
+      lg:px-8
+    "
+  >
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <div class="logo-wrapper">
+          <router-link :to="{ name: 'Home' }"
+            ><img class="logo" src="@/assets/images/crown.svg" alt="app logo"
+          /></router-link>
+        </div>
+        <h2 class="mt-6 text-center text-2xl font-bold text-gray-900">
+          Sign in to your account
+        </h2>
+      </div>
+      <SignUpForm />
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vue'
-import SignUpForm from '@/components/form/SignUpForm'
+import { mapGetters } from 'vuex'
+import SignUpForm from '@/components/auth/SignUpForm'
 
 export default {
   name: 'SignUp',
@@ -27,4 +63,13 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.signup {
+  background: #e9e8fa;
+}
+
+.signup .logo-wrapper {
+  display: flex;
+  justify-content: center;
+}
+</style>

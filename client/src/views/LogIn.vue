@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import LogInForm from '@/components/form/LogInForm'
-import { mapGetters } from 'vue'
+import LogInForm from '@/components/auth/LogInForm'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'LogIn',
