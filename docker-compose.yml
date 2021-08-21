@@ -30,8 +30,8 @@ services:
     volumes:
       # - /app/node_modules
       - './auth-service:/app'
-    ports:
-      - '30502:3000'
+    # ports:
+    #   - '30501:3000'
     depends_on:
       - mongo
     links:
@@ -41,27 +41,27 @@ services:
       - REDIS_DB_PORT=6379
       - MONGO_DB_URI=mongodb://mongo:27017/auth-service-db
       - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
-  user-service:
-    container_name: buyemall_user-service
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev # The name of the docker config file
-      context: ./user-service
-    volumes:
-      # - /app/node_modules
-      - ./user-service:/app
-    # ports:
-    #   - '30502:3000'
-    depends_on:
-      - mongo
-    links:
-      - mongo
-    environment:
-      - PORT=3000
-      - REDIS_DB_URI=redis
-      - REDIS_DB_PORT=6379
-      - MONGO_DB_URI=mongodb://mongo:27017/user-service-db
-      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+  # user-service:
+  #   container_name: buyemall_user-service
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile.dev # The name of the docker config file
+  #     context: ./user-service
+  #   volumes:
+  #     # - /app/node_modules
+  #     - ./user-service:/app
+  #   # ports:
+  #   #   - '30502:3000'
+  #   depends_on:
+  #     - mongo
+  #   links:
+  #     - mongo
+  #   environment:
+  #     - PORT=3000
+  #     - REDIS_DB_URI=redis
+  #     - REDIS_DB_PORT=6379
+  #     - MONGO_DB_URI=mongodb://mongo:27017/user-service-db
+  #     - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
   product-service:
     container_name: buyemall_product-service
     restart: always
@@ -72,7 +72,7 @@ services:
       # - /app/node_modules
       - ./product-service:/app
     # ports:
-    #   - '30502:3000'
+    #   - '30503:3000'
     depends_on:
       - mongo
     links:
@@ -83,6 +83,27 @@ services:
       - REDIS_DB_PORT=6379
       - MONGO_DB_URI=mongodb://mongo:27017/product-service-db
       - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+  coupon-service:
+    container_name: buyemall_coupon-service
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev # The name of the docker config file
+      context: ./coupon-service
+    volumes:
+      # - /app/node_modules
+      - ./coupon-service:/app
+    # ports:
+    #   - '30504:3000'
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      - PORT=3000
+      - REDIS_DB_URI=redis
+      - REDIS_DB_PORT=6379
+      - MONGO_DB_URI=mongodb://mongo:27017/coupon-service-db
+      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
   cart-service:
     container_name: buyemall_cart-service
     restart: always
@@ -92,8 +113,8 @@ services:
     volumes:
       # - /app/node_modules
       - ./cart-service:/app
-    ports:
-      - '30502:3000'
+    # ports:
+    #   - '30505:3000'
     depends_on:
       - mongo
     links:
@@ -114,7 +135,7 @@ services:
   #     # - /app/node_modules
   #     - ./order-service:/app
   #   ports:
-  #     - '30502:3000'
+  #     - '30506:3000'
   #   depends_on:
   #     - mongo
   #   links:
@@ -134,7 +155,7 @@ services:
   #     # - /app/node_modules
   #     - ./payment-service:/app
   #   ports:
-  #     - '30502:3000'
+  #     - '30507:3000'
   #   depends_on:
   #     - mongo
   #   links:
