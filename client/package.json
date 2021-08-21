@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@heroicons/vue": "^1.0.3",
+    "@tailwindcss/forms": "^0.3.3",
     "axios": "^0.21.1",
     "chart.js": "^3.5.0",
     "core-js": "^3.6.5",
@@ -29,6 +30,7 @@
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
+    "@vue/devtools": "^5.3.4",
     "@vue/eslint-config-prettier": "^6.0.0",
     "autoprefixer": "^9",
     "babel-eslint": "^10.1.0",

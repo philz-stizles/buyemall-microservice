@@ -1,23 +1,21 @@
 <template>
-  <div class="dashboard">
+  <div
+    class="dashboard-home md:flex flex-col md:flex-row md:min-h-screen w-full"
+  >
     <Sidebar :menuBlueprint="menuBlueprint" />
-    <!-- <NewspaperIcon class="w-10 h-10" /> -->
-    <div class="main">
-      <DashboardNav />
-      <div class="content">
-        <router-view></router-view>
-      </div>
-    </div>
+    <main class="bg-gray-100 p-10">
+      <router-view></router-view>
+    </main>
   </div>
+  <app-drawer v-if="isDrawerOpen" title="Notifications"></app-drawer>
 </template>
 
 <script>
 import Sidebar from '@/components/sidebar/Sidebar'
-import DashboardNav from '@/components/dashboard/DashboardNav'
 
 export default {
   name: 'DashboardHome',
-  components: { Sidebar, DashboardNav },
+  components: { Sidebar },
   data() {
     return {
       menuBlueprint: [
@@ -42,40 +40,19 @@ export default {
           icon: 'gift-icon',
         },
         { label: 'orders', to: 'Orders', icon: 'shopping-cart-icon' },
-        { label: 'customers', to: 'Orders', icon: 'user-group-icon' },
-        { label: 'audit', to: 'Orders', icon: 'shield-exclamation-icon' },
-        { label: 'settings', to: 'Orders', icon: 'cog-icon' },
+        { label: 'customers', to: 'Customers', icon: 'user-group-icon' },
+        { label: 'audit', to: 'Audit', icon: 'shield-exclamation-icon' },
+        { label: 'settings', to: 'Settings', icon: 'cog-icon' },
+        { label: 'profile', to: 'Profile', icon: 'cog-icon' },
       ],
     }
+  },
+  computed: {
+    isDrawerOpen() {
+      return this.$store.getters.getIsNotificationOpen
+    },
   },
 }
 </script>
 
-<style>
-.dashboard {
-  min-height: 100vh;
-  position: relative;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.dashboard .main {
-  background-color: #f5f6f7;
-  overflow: auto;
-  position: relative;
-  z-index: 2;
-  width: calc(100% - 260px);
-  min-height: 100%;
-  max-height: 100%;
-  height: 100%;
-  transition-property: top, bottom, width;
-  transition-duration: 0.2s, 0.2s, 0.35s;
-  transition-timing-function: linear, linear, ease;
-}
-
-.dashboard .content {
-  padding: 3rem;
-}
-</style>
+<style></style>

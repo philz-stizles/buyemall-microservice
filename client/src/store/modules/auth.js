@@ -1,13 +1,15 @@
 import AuthService from '@/services/auth-service'
 
-const loggedInUser = JSON.parse(localStorage.getItem('user'))
+const loginCredentials = JSON.parse(localStorage.getItem('user'))
 
 export default {
   namespaced: true,
-  state: loggedInUser
+  state: loginCredentials
     ? {
         isAuthenticated: true,
-        loggedInUser,
+        loggedInUser: loginCredentials.user,
+        token: loginCredentials.token,
+        expiration: loginCredentials.expirations,
       }
     : {
         isAuthenticated: false,
@@ -41,6 +43,7 @@ export default {
     signIn({ commit }, credentials) {
       return AuthService.signIn(credentials).then(
         data => {
+          console.log(data)
           commit('loginSuccess', data)
           return Promise.resolve(data)
         },
@@ -55,6 +58,7 @@ export default {
       commit('logout')
     },
     signUp({ commit }, credentials) {
+      console.log(credentials)
       return AuthService.signUp(credentials).then(
         response => {
           commit('registerSuccess')
@@ -70,6 +74,9 @@ export default {
   getters: {
     isAuthenticated(state) {
       return state.isAuthenticated
+    },
+    getToken(state) {
+      return state.token
     },
   },
 }

@@ -1,20 +1,4 @@
 <template>
-  <!--
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
   <div
     class="
       signup
@@ -29,7 +13,7 @@
       lg:px-8
     "
   >
-    <div class="max-w-md w-full space-y-8">
+    <div class="max-w-md w-full transform -translate-y-6">
       <div>
         <div class="logo-wrapper">
           <router-link :to="{ name: 'Home' }"
@@ -57,7 +41,7 @@ export default {
   },
   created() {
     if (this.isAuthenticated) {
-      this.$router.push({ name: 'Profile' })
+      this.$router.push({ name: 'Overview' })
     }
   },
 }

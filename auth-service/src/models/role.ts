@@ -24,7 +24,7 @@ const roleSchema = new Schema(
     description: {
       type: String,
     },
-    roles: [{ type: Schema.Types.ObjectId, ref: 'Permission' }],
+    permissions: [{ type: Schema.Types.ObjectId, ref: 'Permission' }],
   },
   {
     timestamps: true,

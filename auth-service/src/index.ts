@@ -10,13 +10,13 @@ const start = async () => {
     throw new Error('JWT_KEY must be defined')
   }
 
-  if (!process.env.MONGO_URI) {
-    throw new Error('MONGO_URI must be defined')
+  if (!process.env.MONGO_DB_URI) {
+    throw new Error('MONGO_DB_URI must be defined')
   }
 
   try {
     // The domain must be the name of the auth mongo pod service in the kubernetes cluster
-    await mongoose.connect(process.env.MONGO_URI, {
+    await mongoose.connect(process.env.MONGO_DB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,

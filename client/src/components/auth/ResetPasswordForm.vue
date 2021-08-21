@@ -1,46 +1,110 @@
 <template>
-  <form @submit.prevent="handleLogin">
-    <div class="title">
-      <h1>Welcome back!</h1>
-      <p>Please login using your account</p>
+  <form class="mt-8 space-y-6 signup-form" @submit.prevent="handleSubmit">
+    <div class="rounded-md shadow-sm -space-y-px">
+      <TextInput
+        label="FullName"
+        placeholder="Full name"
+        :value="formInputs.fullname"
+        @onInput="handleInput($event)"
+        @onChange="handleChange($event)"
+      />
+      <TextInput
+        label="Email"
+        placeholder="Email"
+        :value="formInputs.email"
+        @onInput="handleInput($event)"
+        @onChange="handleChange($event)"
+      />
+      <TextInput
+        type="password"
+        label="Password"
+        placeholder="Password"
+        :value="formInputs.password"
+        @onInput="handleInput($event)"
+        @onChange="handleChange($event)"
+      />
+
+      <TextInput
+        type="password"
+        label="Password"
+        placeholder="Password"
+        :value="formInputs.password"
+        @onInput="handleInput($event)"
+        @onChange="handleChange($event)"
+      />
     </div>
-    <TextInput label="Username" :value="signUpForm.username" />
-    <TextInput label="Password" :value="signUpForm.password" />
-    <Button>Login</Button>
-    <p class="actions">
-      <span>Forgot your password?</span>
-      <span class="reset">Reset password</span>
-    </p>
-    <Button color="secondary">Create an account</Button>
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <input
+          id="remember-me"
+          name="remember-me"
+          type="checkbox"
+          class="
+            h-4
+            w-4
+            text-indigo-600
+            focus:ring-indigo-500
+            border-gray-300
+            rounded
+          "
+        />
+        <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+          Remember me
+        </label>
+      </div>
+
+      <div class="text-sm">
+        <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+          Forgot your password?
+        </a>
+      </div>
+    </div>
+    <div>
+      <app-button color="primary" :expanded="true" :isLoading="isLoading">
+        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+          <lock-closed-icon class="h-5 w-5" />
+        </span>
+        Create Account</app-button
+      >
+    </div>
   </form>
 </template>
 
 <script>
 import TextInput from '@/components/form/TextInput'
-import Button from '@/components/Button'
 
 export default {
-  name: 'LogInForm',
-  components: { TextInput, Button },
+  name: 'ResetPasswordForm',
+  components: { TextInput },
   data() {
     return {
       isLoading: false,
       message: '',
-      logInForm: {
-        username: '',
-        password: '',
+      formInputs: {
+        fullname: 'Theophilus',
+        email: 'theophilus@gmail.com',
+        password: '12345678',
       },
+      formIsValid: true,
     }
   },
   methods: {
-    handleLogin() {
+    handleSubmit() {
+      console.log(this.formInputs)
+      this.formIsValid = true
+      if (!this.checkFormIsValid(this.formInputs)) {
+        this.formIsValid = false
+        return
+      }
+
       this.isLoading = true
-      this.$store.dispatch('auth/signUp', this.logInForm).then(
+      this.$store.dispatch('auth/signUp', this.formInputs).then(
         () => {
+          this.isLoading = false
           this.$router.push('/profile')
         },
         error => {
-          this.loading = false
+          this.isLoading = false
           this.message =
             (error.response &&
               error.response.data &&
@@ -49,6 +113,16 @@ export default {
             error.toString()
         }
       )
+    },
+    checkFormIsValid({ fullname, email, password }) {
+      return (fullname !== '' && email.includes('@')) || password.length >= 6
+    },
+    handleInput({ name, value }) {
+      console.log(name, value)
+      this.formInputs[name] = value
+    },
+    handleChange(target) {
+      console.log(target.value)
     },
   },
 }

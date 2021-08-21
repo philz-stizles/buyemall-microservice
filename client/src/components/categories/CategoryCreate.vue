@@ -1,28 +1,27 @@
 <template>
   <form class="category-form" @submit.prevent="handleSubmit">
-    <text-input
-      label="title"
+    <app-text-input
+      label="Name"
       :value="categoryForm.title"
       @input="onInput"
       @change="onChange"
     />
-    <text-input
+    <app-text-input
+      label="Description"
       type="textarea"
-      label="description"
-      :value="categoryForm.description"
+      :value="categoryForm.title"
       @input="onInput"
       @change="onChange"
     />
-    <app-button>Create Category <i class="fa fa-plus"></i></app-button>
   </form>
 </template>
 
 <script>
-import TextInput from '@/components/form/TextInput'
+// import TextInput from '@/components/form/TextInput'
 
 export default {
   name: 'CategoryCreate',
-  components: { TextInput },
+  // components: { TextInput },
   data() {
     return {
       categoryForm: {
@@ -45,12 +44,4 @@ export default {
 }
 </script>
 
-<style>
-.category-form {
-  box-shadow: 0 6px 10px -4px rgb(0 0 0 / 15%);
-  background: #fff;
-  width: 50%;
-  border-radius: 7px;
-  padding: 3rem 3rem 1rem 3rem;
-}
-</style>
+<style></style>

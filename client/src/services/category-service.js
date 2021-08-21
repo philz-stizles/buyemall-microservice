@@ -1,20 +1,26 @@
-import http from '../http-common'
+import http from './http-common'
 
 class CategoryDataService {
   constructor() {
     this.endpoint = '/category'
   }
 
-  getAll() {
-    return http.get(this.endpoint)
+  getFilteredList(filters) {
+    return http.get(
+      `${this.endpoint}?${Object.keys(filters).map(
+        filter => `${filter}=${filters[filter]}`
+      )}`
+    )
   }
 
   get(id) {
     return http.get(`${this.endpoint}/${id}`)
   }
 
-  create(data) {
-    return http.post(this.endpoint, data)
+  create(data, token) {
+    return http.post(this.endpoint, data, {
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
 
   update(id, data) {

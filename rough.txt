@@ -1,12 +1,5 @@
-version: '3.7'
+{% comment %} version: '3.7'
 services:
-  nginx:
-    restart: always
-    build:
-      dockerfile: Dockerfile # The name of the docker config file
-      context: ./nginx #
-    ports:
-      - '3050:80'
   customers:
     container_name: customer_service
     restart: always
@@ -110,4 +103,4 @@ services:
     volumes:
       - ./db:/data/db
     ports:
-      - '27017:27017'
+      - '27017:27017' {% endcomment %}

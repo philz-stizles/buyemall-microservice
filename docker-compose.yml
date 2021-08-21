@@ -1,0 +1,160 @@
+version: '3.7'
+services:
+  nginx:
+    container_name: buyemal_nginx
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev # The name of the docker config file
+      context: ./nginx #
+    ports:
+      - '3051:80'
+    volumes:
+      - ./nginx:/etc/nginx/conf.d/
+  # client:
+  #   container_name: buyemall/client
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile.dev # The name of the docker config file
+  #     context: ./client
+  #   volumes:
+  #     # - /app/node_modules
+  #     - ./client:/app
+  #   ports:
+  #     - '8080:80'
+  auth-service:
+    container_name: buyemall_auth-service
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev # The name of the docker config file
+      context: ./auth-service
+    volumes:
+      # - /app/node_modules
+      - './auth-service:/app'
+    ports:
+      - '30502:3000'
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      - REDIS_DB_URI=redis
+      - REDIS_DB_PORT=6379
+      - MONGO_DB_URI=mongodb://mongo:27017/auth-service-db
+      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+  user-service:
+    container_name: buyemall_user-service
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev # The name of the docker config file
+      context: ./user-service
+    volumes:
+      # - /app/node_modules
+      - ./user-service:/app
+    # ports:
+    #   - '30502:3000'
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      - PORT=3000
+      - REDIS_DB_URI=redis
+      - REDIS_DB_PORT=6379
+      - MONGO_DB_URI=mongodb://mongo:27017/user-service-db
+      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+  product-service:
+    container_name: buyemall_product-service
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev # The name of the docker config file
+      context: ./product-service
+    volumes:
+      # - /app/node_modules
+      - ./product-service:/app
+    # ports:
+    #   - '30502:3000'
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      - PORT=3000
+      - REDIS_DB_URI=redis
+      - REDIS_DB_PORT=6379
+      - MONGO_DB_URI=mongodb://mongo:27017/product-service-db
+      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+  cart-service:
+    container_name: buyemall_cart-service
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev # The name of the docker config file
+      context: ./cart-service
+    volumes:
+      # - /app/node_modules
+      - ./cart-service:/app
+    ports:
+      - '30502:3000'
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      - PORT=3000
+      - REDIS_DB_URI=redis
+      - REDIS_DB_PORT=6379
+      - MONGO_DB_URI=mongodb://mongo:27017/cart-service-db
+      - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+  # order-service:
+  #   container_name: buyemall_order-service
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile.dev # The name of the docker config file
+  #     context: ./order-service
+  #   volumes:
+  #     # - /app/node_modules
+  #     - ./order-service:/app
+  #   ports:
+  #     - '30502:3000'
+  #   depends_on:
+  #     - mongo
+  #   links:
+  #     - mongo
+  #   environment:
+  #     - REDIS_DB_URI=redis
+  #     - REDIS_DB_PORT=6379
+  #     - MONGO_DB_URI=mongodb://mongo:27017/order-service-db
+  #     - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+  # payment-service:
+  #   container_name: buyemall_payment-service
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile.dev # The name of the docker config file
+  #     context: ./payment-service
+  #   volumes:
+  #     # - /app/node_modules
+  #     - ./payment-service:/app
+  #   ports:
+  #     - '30502:3000'
+  #   depends_on:
+  #     - mongo
+  #   links:
+  #     - mongo
+  #   environment:
+  #     - REDIS_DB_URI=redis
+  #     - REDIS_DB_PORT=6379
+  #     - MONGO_DB_URI=mongodb://mongo:27017/payment-service-db
+  #     - JWT_KEY=nh7dd4456vhbgkjvdDWQZXMKOY6FDEAmkbZMOPI
+  mongo:
+    container_name: buyemall_mongo
+    image: mongo
+    restart: always
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - '27017:27017'
+  redis:
+    container_name: buyemall_redis
+    image: redis
+    restart: always
+  # rabbitmq:
+  # worker:

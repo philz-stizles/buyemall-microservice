@@ -1,15 +1,24 @@
 import express from 'express'
 import 'express-async-errors'
+import helmet from 'helmet'
+import compression from 'compression'
+import cors from 'cors'
 import cookieSession from 'cookie-session'
 import { signupRouter } from './routes/signup'
 import { signinRouter } from './routes/signin'
 import { currentUserRouter } from './routes/current-user'
 import { signoutRouter } from './routes/signout'
-import { errorHandler, NotFoundError } from '@devdezyn/common'
+import { currentUser, errorHandler, NotFoundError } from '@devdezyn/common'
 
 const app = express()
 
-app.set('trust proxy', 1)
+app.set('trust proxy', true)
+
+app.use(helmet())
+
+app.use(cors())
+
+app.use(compression())
 
 app.use(express.json())
 
@@ -20,6 +29,8 @@ app.use(
     secure: process.env.NODE_ENV === 'production',
   })
 )
+
+app.use(currentUser)
 
 app.use(signupRouter)
 app.use(signinRouter)

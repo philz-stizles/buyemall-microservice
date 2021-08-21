@@ -4,14 +4,14 @@
       <TextInput
         label="FullName"
         placeholder="Full name"
-        :value="signUpForm.fullname"
+        :value="formInputs.fullname"
         @onInput="handleInput($event)"
         @onChange="handleChange($event)"
       />
       <TextInput
         label="Email"
         placeholder="Email"
-        :value="signUpForm.email"
+        :value="formInputs.email"
         @onInput="handleInput($event)"
         @onChange="handleChange($event)"
       />
@@ -19,7 +19,7 @@
         type="password"
         label="Password"
         placeholder="Password"
-        :value="signUpForm.password"
+        :value="formInputs.password"
         @onInput="handleInput($event)"
         @onChange="handleChange($event)"
       />
@@ -28,7 +28,7 @@
         type="password"
         label="Password"
         placeholder="Password"
-        :value="signUpForm.password"
+        :value="formInputs.password"
         @onInput="handleInput($event)"
         @onChange="handleChange($event)"
       />
@@ -60,22 +60,9 @@
       </div>
     </div>
     <div>
-      <app-button color="primary" :expanded="true"
-        ><span class="absolute left-0 inset-y-0 flex items-center pl-3">
-          <!-- Heroicon name: solid/lock-closed -->
-          <svg
-            class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
+      <app-button color="primary" :expanded="true" :isLoading="isLoading">
+        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+          <lock-closed-icon class="h-5 w-5" />
         </span>
         Create Account</app-button
       >
@@ -93,7 +80,7 @@ export default {
     return {
       isLoading: false,
       message: '',
-      signUpForm: {
+      formInputs: {
         fullname: 'Theophilus',
         email: 'theophilus@gmail.com',
         password: '12345678',
@@ -103,21 +90,21 @@ export default {
   },
   methods: {
     handleSignUp() {
-      console.log(this.signUpForm)
+      console.log(this.formInputs)
       this.formIsValid = true
-      if (!this.checkFormIsValid(this.signUpForm)) {
+      if (!this.checkFormIsValid(this.formInputs)) {
         this.formIsValid = false
         return
       }
 
       this.isLoading = true
-      this.$store.dispatch('auth/signUp', this.signUpForm).then(
+      this.$store.dispatch('auth/signUp', this.formInputs).then(
         () => {
           this.isLoading = false
           this.$router.push('/profile')
         },
         error => {
-          this.loading = false
+          this.isLoading = false
           this.message =
             (error.response &&
               error.response.data &&
@@ -132,7 +119,7 @@ export default {
     },
     handleInput({ name, value }) {
       console.log(name, value)
-      this.signUpForm[name] = value
+      this.formInputs[name] = value
     },
     handleChange(target) {
       console.log(target.value)

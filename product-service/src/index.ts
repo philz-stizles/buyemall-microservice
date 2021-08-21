@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 import chalk from 'chalk'
 import dotenv from 'dotenv'
 import app from './app'
-import { rabbitMQWrapper } from './rabbitmq-wrapper'
 
 dotenv.config()
 
@@ -11,35 +10,12 @@ const start = async () => {
     throw new Error('JWT_KEY must be defined')
   }
 
-  if (!process.env.MONGO_URI) {
+  if (!process.env.MONGO_DB_URI) {
     throw new Error('MONGO_URI must be defined')
   }
 
-  if (!process.env.RabbitMQ_URI) {
-    throw new Error('RabbitMQ_URI must be defined')
-  }
-
   try {
-    await rabbitMQWrapper.connect(process.env.RabbitMQ_URI, 'PRODUCT')
-
-    rabbitMQWrapper.client.on('close', () => {
-      console.log('RabbitMQ connection closed!')
-      process.exit()
-    })
-
-    // When a connection/client is closed, so are its channels.
-    process.on('SIGINT', () => rabbitMQWrapper.client.close())
-    process.on('SIGTERM', () => rabbitMQWrapper.client.close())
-
-    await rabbitMQWrapper.channel.consume('ORDER', function (msg: any) {
-      if (msg) {
-        console.log(msg.content.toString())
-        // const { } = JSON.parse(msg.content)
-        rabbitMQWrapper.channel.ack(msg)
-      }
-    })
-
-    await mongoose.connect(`${process.env.MONGO_URI}/product-service-db`, {
+    await mongoose.connect(process.env.MONGO_DB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
@@ -49,8 +25,10 @@ const start = async () => {
     console.error(chalk.red(error.message))
   }
 
-  app.listen(3000, () => {
-    console.log('Product service is listening on port 3000!')
+  const PORT = process.env.PORT || 3000
+
+  app.listen(PORT, () => {
+    console.log(chalk.green(`Product service is listening on port ${PORT}!`))
   })
 }
 

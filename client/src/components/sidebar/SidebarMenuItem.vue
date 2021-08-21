@@ -1,59 +1,54 @@
 <template>
-  <li class="sidebar-menu-item">
-    <router-link :to="{ name: menuItem.to }" class="sidebar-menu-link">
-      <component :is="menuItem.icon" class="h-5 w-5"></component>
-      <!-- <i :class="menuItem.icon"></i> -->
-      <p>{{ menuItem.label }}</p>
-    </router-link>
-  </li>
+  <router-link
+    :to="{ name: menuItem.to }"
+    class="
+      sidebar-menu-item
+      px-4
+      py-2
+      rounded-md
+      text-sm
+      font-medium
+      block
+      mt-1
+    "
+    :class="
+      isActive
+        ? 'bg-gray-900 text-white'
+        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+    "
+  >
+    <component :is="menuItem.icon" class="mr-2 h-5 w-5"></component>
+    {{ capitalize(menuItem.label) }}
+  </router-link>
 </template>
 
 <script>
+import { capitalize } from '@/utils/typography'
 export default {
   name: 'SidebarMenuItem',
   props: ['menuItem'],
+  methods: {
+    capitalize,
+  },
+  computed: {
+    isActive() {
+      return (
+        this.$route.name.toLowerCase() === this.menuItem.label.toLowerCase()
+      )
+    },
+  },
 }
 </script>
 
 <style>
-.sidebar-menu-item {
-  position: relative;
-  display: block;
-  padding: 0.8rem 2.4rem;
+.sidebar-menu-item svg {
+  display: inline-block;
 }
 
-.sidebar-menu-link {
-  display: flex;
-  align-items: center;
-  color: #66615b;
-  /* padding: 0.8rem 2.4rem; */
-  opacity: 0.7;
-  white-space: nowrap;
-  transition: all 0.3s;
-}
-
-.sidebar-menu-link p {
-  line-height: 30px;
-  font-weight: 500;
-  text-transform: capitalize;
-  position: relative;
-  transform: translateZ(0);
-  opacity: 1;
-  display: block;
-  height: auto;
-  white-space: nowrap;
-}
-
-.sidebar-menu-link svg {
-  width: 2.4rem;
-  height: 2.4rem;
-  margin-right: 1.5rem;
-}
-
-.sidebar-menu-link.router-link-exact-active {
-  background: #7b2cbf;
+.sidebar-menu-item.router-link-exact-active {
+  /* background: #7b2cbf;
   border-radius: 7px;
   padding: 0.8rem 1.6rem;
-  color: #fff;
+  color: #fff; */
 }
 </style>
