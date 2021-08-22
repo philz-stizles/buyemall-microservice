@@ -17,6 +17,8 @@ app.use(cors())
 
 app.use(compression())
 
+app.use(express.json())
+
 app.use(
   cookieSession({
     // name: 'session',

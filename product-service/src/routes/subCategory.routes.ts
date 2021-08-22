@@ -13,13 +13,10 @@ import {
 const router = express.Router()
 
 // routes
-router
-  .route('/sub-categories')
-  .post(requireAuth, authorize('admin'), create)
-  .get(list)
+router.route('/').post(requireAuth, authorize('admin'), create).get(list)
 
 router
-  .route('/sub-categories/:slug')
+  .route('/:slug')
   .get(read)
   .put(requireAuth, authorize('admin'), update)
   .delete(requireAuth, authorize('admin'), remove)

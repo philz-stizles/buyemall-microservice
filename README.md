@@ -5,3 +5,8 @@
 - Vue
 - Node
 - Mongo DB
+- Dockerfile
+- Kafka
+- Redis
+- Bull
+- Git & Circle CI

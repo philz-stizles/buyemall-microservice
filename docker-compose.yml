@@ -11,7 +11,7 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d/
   # client:
-  #   container_name: buyemall/client
+  #   container_name: buyemall_client
   #   restart: always
   #   build:
   #     dockerfile: Dockerfile.dev # The name of the docker config file
@@ -69,8 +69,8 @@ services:
       dockerfile: Dockerfile.dev # The name of the docker config file
       context: ./product-service
     volumes:
-      # - /app/node_modules
-      - ./product-service:/app
+      - '/app/node_modules'
+      - './product-service:/app'
     # ports:
     #   - '30503:3000'
     depends_on:
@@ -91,7 +91,7 @@ services:
       context: ./coupon-service
     volumes:
       # - /app/node_modules
-      - ./coupon-service:/app
+      - './coupon-service:/app'
     # ports:
     #   - '30504:3000'
     depends_on:

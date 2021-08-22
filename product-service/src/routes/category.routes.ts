@@ -11,13 +11,14 @@ import { requireAuth } from '@devdezyn/buyemall-common'
 
 const router = Router()
 
+router.route('/').post(requireAuth, create).get(list)
+
 router
-  .route('/categories')
-  .post(requireAuth, create)
+  .route('/:slug')
   .get(read)
   .put(requireAuth, update)
   .delete(requireAuth, remove)
 
-router.get('/categories/:_id/subs', getCategorySubs)
+router.get('/:_id/subs', getCategorySubs)
 
 export default router

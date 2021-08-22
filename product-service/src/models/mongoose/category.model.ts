@@ -1,10 +1,11 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document } from 'mongoose'
 
 export interface ICategoryDocument extends Document {
-  name: string;
-  slug: string;
-  createdAt: Date;
-  updatedAt: Date;
+  name: string
+  slug: string
+  description: string
+  createdAt: Date
+  updatedAt: Date
 }
 
 const categorySchema = new Schema(
@@ -16,11 +17,18 @@ const categorySchema = new Schema(
       minlength: [2, 'Too short'],
       maxlength: [32, 'Too long'],
     },
+    description: {
+      type: String,
+      trim: true,
+      required: 'Description is required',
+      minlength: [5, 'Too short'],
+      maxlength: [32, 'Too long'],
+    },
     slug: { type: String, unique: true, lowercase: true, index: true },
   },
   { timestamps: true }
-);
+)
 
-const Category = model<ICategoryDocument>('Category', categorySchema);
+const Category = model<ICategoryDocument>('Category', categorySchema)
 
-export default Category;
+export default Category

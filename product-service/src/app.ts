@@ -7,7 +7,7 @@ import cookieSession from 'cookie-session'
 import categoryRoutes from '@src/routes/category.routes'
 import subCategoryRoutes from '@src/routes/subCategory.routes'
 import productRoutes from '@src/routes/product.routes'
-import { errorHandler, NotFoundError } from '@devdezyn/common'
+import { currentUser, errorHandler, NotFoundError } from '@devdezyn/common'
 
 const app = express()
 
@@ -19,6 +19,8 @@ app.use(cors())
 
 app.use(compression())
 
+app.use(express.json())
+
 app.use(
   cookieSession({
     // name: 'session',
@@ -26,6 +28,8 @@ app.use(
     secure: process.env.NODE_ENV === 'production',
   })
 )
+
+app.use(currentUser)
 
 // Resource routes
 app.use('/api/v1/subCategories', subCategoryRoutes)

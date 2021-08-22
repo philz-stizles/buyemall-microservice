@@ -18,22 +18,22 @@ const router = express.Router()
 
 router.route('/').post(requireAuth, authorize('admin'), create).get(listAll)
 
-router.post('/products/filtered', list)
+router.post('/filtered', list)
 
-router.get('/products/total', getProductsTotal)
+router.get('/total', getProductsTotal)
 
 router.post('/upload', requireAuth, authorize('admin'), uploadFile)
 router.post('/remove-file', requireAuth, authorize('admin'), removeFile)
 
 router
-  .route('/products/:slug')
+  .route('/:slug')
   .get(read)
   .put(requireAuth, authorize('admin'), update)
   .delete(requireAuth, authorize('admin'), remove)
 
-router.put('/products/:productId/set-rating', requireAuth, setProductRating)
+router.put('/:productId/set-rating', requireAuth, setProductRating)
 
-router.get('/products/:productId/related', listRelatedProducts)
+router.get('/:productId/related', listRelatedProducts)
 
 // router.post("/search/filters", searchFilters);
 

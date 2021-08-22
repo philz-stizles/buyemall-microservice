@@ -8,11 +8,15 @@ import { IProductDocument } from '@src/models/mongoose/product.model'
 
 export const create = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name } = req.body
-    const category = await new Category({ name, slug: slugify(name) }).save()
+    const { name, description } = req.body
+    const category = await new Category({
+      name,
+      slug: slugify(name),
+      description,
+    }).save()
     res.status(201).json(category)
   } catch (err) {
-    // console.log(err);
+    console.log(err.message)
     res.status(400).send('Create category failed')
   }
 }
